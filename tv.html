@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>티빙 함께보기 · TV 화면</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #05060a; }
+    .tvwrap { min-height: 100vh; display: grid; grid-template-columns: 1fr 330px; gap: 20px; padding: 24px; }
+    .tvmain .video { height: min(62vh, 560px); border-radius: 18px; }
+    .tvmain .v-score { font-size: 34px; gap: 28px; }
+    .tvmain .v-score b { font-size: 84px; }
+    .tvmain .v-score .tn { font-size: 30px; }
+    .tvmain .v-state { font-size: 22px; }
+    .tvmain .diamond { width: 76px; height: 76px; }
+    .tvmain .v-flash { font-size: 28px; padding: 8px 24px; }
+    .tvside { display: flex; flex-direction: column; gap: 14px; }
+    .tvcode { text-align: center; }
+    .tvlog { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+    @media (max-width: 800px) { .tvwrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="tvwrap">
+    <div class="tvmain">
+      <div id="vid"></div>
+      <h2 style="margin-top:18px" id="roomtitle"></h2>
+      <p class="muted" id="roomsub"></p>
+    </div>
+    <div class="tvside">
+      <div class="card tvcode" id="codebox"></div>
+      <div class="card" style="flex:1;display:flex;flex-direction:column">
+        <b style="margin-bottom:10px">응원석 채팅</b>
+        <div class="tvlog" id="log"></div>
+      </div>
+    </div>
+  </div>
+  <div id="toasts" class="toasts"></div><div id="modal"></div>
+  <script src="js/sim.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/tv.js"></script>
+</body>
+</html>
