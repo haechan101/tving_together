@@ -58,9 +58,9 @@
       $$('.tabs button', root).forEach((b) => b.classList.toggle('active', b.dataset.t === tab));
       const p = $('[data-panel]', root);
       if (tab === 'chat') {
-        p.innerHTML = '<div class="card"><b>티빙톡 · LG 응원방</b><p class="muted small">구단별 대규모 채팅방 (최대 50만 명) — 비교용 목업이에요</p></div>' +
-          '<div class="list"><div class="item"><span class="badge home">LG</span>오늘 타선 터진다</div><div class="item"><span class="badge away">두산</span>불펜 불안한데…</div>' +
-          '<div class="item"><span class="badge home">LG</span>가자 가자 LG!</div></div>' +
+        p.innerHTML = '<div class="card"><b>티빙톡 · 두산 응원방</b><p class="muted small">구단별 대규모 채팅방 (최대 50만 명) — 비교용 목업이에요</p></div>' +
+          '<div class="list"><div class="item"><span class="badge home">두산</span>오늘 타선 터진다</div><div class="item"><span class="badge away">한화</span>불펜 불안한데…</div>' +
+          '<div class="item"><span class="badge home">두산</span>가자 가자 두산!</div></div>' +
           '<div class="empty">지인끼리만 모이는 방은 <b>함께보기</b> 탭에서 만들 수 있어요.</div>';
       } else if (tab === 'multi') {
         p.innerHTML = '<div class="card"><b>멀티뷰</b><p class="muted small">여러 경기를 분할 화면으로 시청 — 이번 프로토타입 범위 밖이에요.</p></div>';
@@ -74,7 +74,7 @@
             '<div class="item"><div class="grow"><b>' + esc(r.hostName) + '님의 방</b><div class="small muted">' + esc(r.game) + ' · ' + R.count(r) + '/' + r.max + '명</div></div>' +
             '<button class="btn sm primary" data-act="enter" data-id="' + r.id + '">입장</button></div>').join('') + '</div>'
             : '<div class="empty">아직 참여 중인 방이 없어요</div>') +
-          '<h4>초대 링크로 입장</h4><div class="chatform"><input id="join-code" placeholder="초대 링크 또는 방 코드 (예: LG1234)"><button class="btn" data-act="joincode">입장</button></div>';
+          '<h4>초대 링크로 입장</h4><div class="chatform"><input id="join-code" placeholder="초대 링크 또는 방 코드 (예: DH1234)"><button class="btn" data-act="joincode">입장</button></div>';
       }
     }
     function sigRooms() { return JSON.stringify(myOpen(S.user()).map((r) => [r.id, R.count(r)])); }
@@ -102,7 +102,7 @@
   screens.create = (root) => {
     const u = S.user();
     const policy = S.policy();
-    const st = { team: 'LG', max: Math.min(10, policy.maxMembers), allowTrial: true, predictOn: true };
+    const st = { team: '두산', max: Math.min(10, policy.maxMembers), allowTrial: true, predictOn: true };
     const mine = Object.values(S.rooms()).filter((r) => r.host === u.id && r.status === 'live');
     const ended = sim.isEnded();
     let html = '<header class="topbar"><button class="icon back" data-act="back">‹</button><span class="tb-title">함께보기 방 만들기</span></header><div class="pad">';
@@ -116,16 +116,16 @@
           '<div class="row"><button class="btn grow" data-act="goexisting" data-id="' + mine[0].id + '">기존 방으로</button><button class="btn danger grow" data-act="endexisting" data-id="' + mine[0].id + '">종료하고 새로 만들기</button></div></div>';
       }
       html += '<div class="field"><label>경기 (자동 선택)</label><div class="input" data-game></div></div>' +
-        '<div class="field"><label>내 응원팀</label><div class="chips"><button class="chipbtn sel" data-act="team" data-t="LG">LG</button><button class="chipbtn" data-act="team" data-t="두산">두산</button></div></div>' +
+        '<div class="field"><label>내 응원팀</label><div class="chips"><button class="chipbtn sel" data-act="team" data-t="두산">두산</button><button class="chipbtn" data-act="team" data-t="한화">한화</button></div></div>' +
         '<div class="field"><label>최대 인원</label><select id="max">' + [2, 4, 6, 8, 10].filter((n) => n <= policy.maxMembers).map((n) => '<option value="' + n + '"' + (n === st.max ? ' selected' : '') + '>' + n + '명</option>').join('') + '</select></div>' +
         '<div class="item"><div class="grow"><b>비구독자 체험권 허용</b><div class="small muted">이닝 단위로 체험해요 (운영 정책: ' + policy.trialInnings + '이닝)</div></div><button class="switch on" data-act="sw" data-k="allowTrial"></button></div>' +
-        '<div class="item"><div class="grow"><b>승부예측 사용</b><div class="small muted">타석 결과 맞히기와 방 순위</div></div><button class="switch on" data-act="sw" data-k="predictOn"></button></div>' +
+        '<div class="item"><div class="grow"><b>승부예측 사용</b><div class="small muted">승부처에서만 열리는 예측 이벤트와 방 순위</div></div><button class="switch on" data-act="sw" data-k="predictOn"></button></div>' +
         '<button class="btn primary block" data-act="submit"' + (mine.length ? ' disabled' : '') + '>방 만들고 링크 받기</button>';
     }
     html += '</div>';
     root.innerHTML = html;
     const g = $('[data-game]', root);
-    function game() { if (g) g.textContent = 'LG vs 두산 · ' + (sim.isEnded() ? '경기 종료' : sim.halfLabel(sim.stateBefore(sim.curPa()))); }
+    function game() { if (g) g.textContent = '두산 vs 한화 · ' + (sim.isEnded() ? '경기 종료' : sim.halfLabel(sim.stateBefore(sim.curPa()))); }
     game();
     bind(root, {
       back() { go('#/home'); },
@@ -175,7 +175,7 @@
       $('[data-link]', root).innerHTML = r.linkActive
         ? '<div class="linkbox"><code>' + esc(R.shortLink(r)) + '</code><span class="badge red">' + remain(r.expires - Date.now()) + '</span></div>'
         : '<div class="card red"><b>링크가 폐기되었어요</b><p class="muted small">새 링크를 발급하면 다시 초대할 수 있어요.</p></div>';
-      $('[data-members]', root).innerHTML = '<div class="row sb"><b>참여 ' + R.count(r) + ' / ' + r.max + '</b><span class="small muted">응원석 LG ' + R.teamCount(r, 'LG') + ' · 두산 ' + R.teamCount(r, '두산') + '</span></div>' +
+      $('[data-members]', root).innerHTML = '<div class="row sb"><b>참여 ' + R.count(r) + ' / ' + r.max + '</b><span class="small muted">응원석 두산 ' + R.teamCount(r, '두산') + ' · 한화 ' + R.teamCount(r, '한화') + '</span></div>' +
         '<div class="list" style="margin-top:8px">' + R.memberList(r).map((m) => '<div class="item"><span class="grow">' + esc(m.name) + (m.role === 'host' ? ' <span class="badge red">방장</span>' : '') + '</span>' + teamBadge(m.team) + '</div>').join('') + '</div>';
     }
     bind(root, {
@@ -247,9 +247,9 @@
       const rr = S.room(id);
       if (!rr) return;
       $('[data-cnt]', root).textContent = R.count(rr);
-      $('[data-teams]', root).textContent = '응원석 LG ' + R.teamCount(rr, 'LG') + ' · 두산 ' + R.teamCount(rr, '두산');
+      $('[data-teams]', root).textContent = '응원석 두산 ' + R.teamCount(rr, '두산') + ' · 한화 ' + R.teamCount(rr, '한화');
       const st = sim.stateBefore(sim.curPa());
-      $('[data-sub]', root).textContent = 'LG vs 두산 · ' + (st.ended ? '경기 종료' : sim.halfLabel(st) + ' 진행 중');
+      $('[data-sub]', root).textContent = '두산 vs 한화 · ' + (st.ended ? '경기 종료' : sim.halfLabel(st) + ' 진행 중');
       updateVideo(root);
     }
     function proceed() {
@@ -290,14 +290,14 @@
     const pref = S.prefs(u.id);
     root.innerHTML =
       '<header class="topbar"><span class="tb-title">응원팀을 골라주세요</span></header><div class="pad">' +
-      '<button class="card" data-act="pick" data-t="LG" style="text-align:left;border-color:var(--home)"><h2>LG</h2><div class="muted" data-c-LG></div></button>' +
-      '<button class="card" data-act="pick" data-t="두산" style="text-align:left;border-color:var(--away)"><h2>두산</h2><div class="muted" data-c-두산></div></button>' +
+      '<button class="card" data-act="pick" data-t="두산" style="text-align:left;border-color:var(--home)"><h2>두산</h2><div class="muted" data-c-두산></div></button>' +
+      '<button class="card" data-act="pick" data-t="한화" style="text-align:left;border-color:var(--away)"><h2>한화</h2><div class="muted" data-c-한화></div></button>' +
       '<div class="item"><div class="grow"><b>상대 팀 채팅 숨기기</b><div class="small muted">상대 응원석 채팅은 보이지 않아요</div></div><button class="switch ' + (pref.hideOpp ? 'on' : '') + '" data-act="hide"></button></div>' +
       '<p class="small muted" style="text-align:center">팀을 누르면 바로 다음으로 넘어가요</p></div>';
     function draw() {
       const rr = S.room(id); if (!rr) return;
-      $('[data-c-LG]', root).textContent = '홈 응원석 · ' + R.teamCount(rr, 'LG') + '명';
-      $('[data-c-두산]', root).textContent = '원정 응원석 · ' + R.teamCount(rr, '두산') + '명';
+      $('[data-c-두산]', root).textContent = '홈 응원석 · ' + R.teamCount(rr, '두산') + '명';
+      $('[data-c-한화]', root).textContent = '원정 응원석 · ' + R.teamCount(rr, '한화') + '명';
     }
     bind(root, {
       hide(el) { const n = !S.prefs(u.id).hideOpp; S.setPrefs(u.id, { hideOpp: n }); el.classList.toggle('on', n); },
@@ -337,8 +337,8 @@
     function draw() {
       updateVideo(root);
       const rr = S.room(id); if (!rr || down) return;
-      const a = R.teamCount(rr, 'LG'), b = R.teamCount(rr, '두산');
-      $('[data-dist]', root).textContent = 'LG ' + a + ' : 두산 ' + b;
+      const a = R.teamCount(rr, '두산'), b = R.teamCount(rr, '한화');
+      $('[data-dist]', root).textContent = '두산 ' + a + ' : 한화 ' + b;
       $('[data-bar]', root).innerHTML = '<i style="width:' + (a + b ? (a / (a + b)) * 100 : 50) + '%;background:var(--home)"></i><i style="flex:1;background:var(--away)"></i>';
     }
     bind(root, {
@@ -357,13 +357,13 @@
     if (!r || !r.members[u.id]) return go('#/landing/' + id);
     const me = r.members[u.id];
     const f = params.f === 'all' ? 'all' : 'mine';
-    const side = me.team === 'LG' ? 'home' : 'away';
+    const side = me.team === '두산' ? 'home' : 'away';
     const cur = sim.curPa();
     const evs = sim.scoringEvents(cur, f === 'mine' ? side : null).slice().reverse();
     root.innerHTML = '<header class="topbar"><button class="icon back" data-act="back">‹</button><span class="tb-title">' + (f === 'mine' ? esc(me.team) + ' 득점 장면' : '주요 장면 다시 보기') + '</span></header><div class="pad">' +
       '<div class="chips"><button class="chipbtn ' + (f === 'mine' ? 'sel' : '') + '" data-act="f" data-f="mine">' + esc(me.team) + ' 득점만</button><button class="chipbtn ' + (f === 'all' ? 'sel' : '') + '" data-act="f" data-f="all">전체 득점</button></div>' +
       (evs.length ? '<div class="list">' + evs.map((p) =>
-        '<button class="clip" data-act="play" data-i="' + p.i + '"><span class="th">▶</span><span><b>' + sim.halfLabel(p) + ' · ' + p.result + '</b><br><span class="small muted">' + sim.TEAMS[p.side] + ' ' + p.runs + '점 · LG ' + p.score.home + ':' + p.score.away + ' 두산</span></span></button>').join('') + '</div>'
+        '<button class="clip" data-act="play" data-i="' + p.i + '"><span class="th">▶</span><span><b>' + sim.halfLabel(p) + ' · ' + p.result + '</b><br><span class="small muted">' + sim.TEAMS[p.side] + ' ' + p.runs + '점 · 두산 ' + p.score.home + ':' + p.score.away + ' 한화</span></span></button>').join('') + '</div>'
         : '<div class="empty">아직 보여줄 득점 장면이 없어요</div>') +
       '<p class="small muted">입장 시 응원팀 득점 장면을 자동으로 모아 보여줘요.</p>' +
       '<button class="btn primary block" data-act="live">라이브로 돌아가기</button></div>';
@@ -374,7 +374,7 @@
       play(el) {
         const p = sim.pas()[parseInt(el.dataset.i, 10)];
         const m = modal('<h3>다시 보기 (시뮬레이션)</h3><div class="video compact"><div class="v-top"><span class="live" style="background:#556">REPLAY</span><span>' + sim.halfLabel(p) + '</span></div>' +
-          '<div class="v-score"><span class="tn">LG</span><b>' + p.score.home + '</b><span class="vs">:</span><b>' + p.score.away + '</b><span class="tn">두산</span></div><div class="v-flash' + (p.result === '홈런' ? ' hr' : '') + '">' + p.result + ' · ' + p.runs + '점</div></div>' +
+          '<div class="v-score"><span class="tn">두산</span><b>' + p.score.home + '</b><span class="vs">:</span><b>' + p.score.away + '</b><span class="tn">한화</span></div><div class="v-flash' + (p.result === '홈런' ? ' hr' : '') + '">' + p.result + ' · ' + p.runs + '점</div></div>' +
           '<p class="muted">' + sim.TEAMS[p.side] + ' ' + p.runs + '점 (' + p.result + ') 장면이에요. 실제 서비스에서는 이 지점부터 타임머신으로 재생돼요.</p>' +
           '<button class="btn primary block" data-close>라이브로 돌아가기</button>');
       },
@@ -414,6 +414,11 @@
       const p = S.policy(); const parts = [];
       if (p.surge) parts.push('<div class="banner warn">접속이 몰려 자동으로 화질을 조정하고 있어요. 중계와 채팅은 그대로 이어져요.</div>');
       if (me.trialEndsPa != null) parts.push('<div class="banner">체험권 이용 중 · ' + trialLabel(me) + ' 볼 수 있어요</div>');
+      const curPa = sim.curPa();
+      if (!p.predictDown && r.predictOn && sim.predictionOpen() && !((r.preds[curPa] || {})[u.id]) && tab !== 'predict') {
+        const c = sim.clutchInfo(curPa);
+        parts.push('<div class="banner err"><div class="row"><span class="grow"><b>승부처 이벤트!</b> ' + esc(c.team) + ' ' + esc(c.label) + ' · 맞히면 +' + sim.CLUTCH_POINTS + '</span><button class="btn sm primary" data-act="gopred">예측하기</button></div></div>');
+      }
       const h = parts.join('');
       const el = $('[data-banners]', root);
       if (el.innerHTML !== h) el.innerHTML = h;
@@ -467,12 +472,14 @@
       r = S.room(id) || r;
       const pol = S.policy();
       const cur = sim.curPa();
+      const clutch = sim.clutchInfo(cur);
       const open = sim.predictionOpen();
       const mine = (r.preds[cur] || {})[u.id];
       const sc = R.scores(r);
-      const sig = [pol.predictDown, r.predictOn, cur, open, mine, open ? sim.predictionSecondsLeft() : 0, sc.map((s) => s.id + s.pts).join(',')].join('|');
+      const sig = [pol.predictDown, r.predictOn, cur, open, mine, open ? sim.predictionSecondsLeft() : 0, !!clutch, sc.map((s) => s.id + s.pts).join(',')].join('|');
       if (!force && sig === predSig) return;
       predSig = sig;
+      const PTS = sim.CLUTCH_POINTS;
       let h = '';
       if (pol.predictDown) {
         h = '<div class="card red"><b>승부예측을 잠시 쉬고 있어요</b><p class="muted small" style="margin-top:4px">부가 기능에 문제가 생겨도 중계와 채팅은 계속 이용할 수 있어요.</p></div>';
@@ -480,19 +487,25 @@
         h = '<div class="card"><b>방장이 승부예측을 껐어요</b></div>';
       } else if (sim.isEnded()) {
         h = '<div class="card"><b>경기가 끝났어요</b><p class="muted small">최종 순위를 확인해 보세요.</p></div>';
-      } else {
+      } else if (clutch) {
         const st = sim.stateBefore(cur);
-        h = '<div class="card"><div class="row sb"><b>다음 타석 결과는?</b>' + (open ? '<span class="timer">' + sim.predictionSecondsLeft() + '초</span>' : '<span class="badge">마감</span>') + '</div>' +
-          '<p class="small muted" style="margin:6px 0 12px">' + sim.halfLabel(st) + ' · ' + st.outs + '아웃 · ' + bases(st.bases) + '</p>' +
+        h = '<div class="event"><span class="tag">승부처 이벤트</span><div class="row sb"><b>' + esc(clutch.team) + ' ' + esc(clutch.label) + '</b>' + (open ? '<span class="timer">' + sim.predictionSecondsLeft() + '초</span>' : '<span class="badge">마감</span>') + '</div>' +
+          '<p class="small muted" style="margin:6px 0 12px">' + sim.halfLabel(st) + ' · ' + st.outs + '아웃 · ' + basesLabel(st.bases) + ' · 정답 시 <b class="red">+' + PTS + '</b> 응원 포인트</p>' +
           '<div class="choices">' + sim.CHOICES.map((c) => '<button class="choice ' + (mine === c ? 'sel' : '') + '" data-act="pick" data-c="' + c + '"' + (!open || mine ? ' disabled' : '') + '>' + c + '</button>').join('') + '</div>' +
-          '<p class="small muted" style="margin-top:10px">' + (mine ? '예측 완료: <b>' + esc(mine) + '</b> · 결과를 기다려요' : open ? '제한 시간 안에 하나를 골라 주세요' : '이번 타석은 마감됐어요. 다음 타석에서 도전해요') + '</p></div>';
-        if (cur > 0) {
-          const pv = sim.pas()[cur - 1]; const mp = (r.preds[cur - 1] || {})[u.id];
-          h += '<div class="card"><div class="small muted">직전 타석 결과</div><div class="row sb" style="margin-top:4px"><b>' + sim.halfLabel(pv) + ' · ' + pv.result + (pv.runs ? ' (' + pv.runs + '점)' : '') + '</b>' +
-            '<span class="badge ' + (mp ? (mp === pv.result ? 'green' : 'red') : '') + '">' + (mp ? '내 예측 ' + esc(mp) + (mp === pv.result ? ' ✓' : ' ✗') : '예측 없음') + '</span></div></div>';
+          '<p class="small muted" style="margin-top:10px">' + (mine ? '예측 완료: <b>' + esc(mine) + '</b> · 결과를 기다려요' : open ? '이 타석의 결과를 맞혀 보세요' : '이번 승부처는 마감됐어요') + '</p></div>';
+      } else {
+        h = '<div class="card"><b>승부처를 기다리는 중이에요</b><p class="muted small" style="margin-top:6px">만루, 득점권 찬스, 후반 접전 같은 <b>승부처</b>에서만 예측 이벤트가 열려요. 열리면 알려 드릴게요.</p></div>';
+      }
+      if (r.predictOn && !pol.predictDown) {
+        let lastC = -1;
+        for (let i = cur - 1; i >= Math.max(0, cur - 40); i--) if (sim.isClutch(i)) { lastC = i; break; }
+        if (lastC >= 0) {
+          const pv = sim.pas()[lastC]; const mp = (r.preds[lastC] || {})[u.id];
+          h += '<div class="card"><div class="small muted">직전 승부처 결과</div><div class="row sb" style="margin-top:4px"><b>' + sim.halfLabel(pv) + ' · ' + pv.result + (pv.runs ? ' (' + pv.runs + '점)' : '') + '</b>' +
+            '<span class="badge ' + (mp ? (mp === pv.result ? 'green' : 'red') : '') + '">' + (mp ? '내 예측 ' + esc(mp) + (mp === pv.result ? ' ✓ +' + PTS : ' ✗') : '예측 없음') + '</span></div></div>';
         }
       }
-      h += '<div><div class="row sb" style="margin:4px 0 8px"><b>방 리더보드</b><span class="small muted">정답 +10 응원 포인트</span></div><div class="list">' +
+      h += '<div><div class="row sb" style="margin:4px 0 8px"><b>방 리더보드</b><span class="small muted">승부처 정답 +' + PTS + ' 응원 포인트</span></div><div class="list">' +
         sc.slice(0, 6).map((s, i) => '<div class="rank ' + (s.id === u.id ? 'me' : '') + '"><span class="n">' + (i + 1) + '</span><span class="grow">' + esc(s.name) + (s.id === u.id ? ' (나)' : '') + '</span>' + teamBadge(s.team) + '<b>' + s.pts + '</b></div>').join('') +
         '</div><p class="small muted" style="margin-top:10px">응원 포인트는 현금으로 바꿀 수 없어요.</p></div>';
       el.innerHTML = h;
@@ -504,7 +517,7 @@
       const sig = list.map((m) => m.id + m.team + (m.trialEndsPa == null ? '' : 't')).join(',');
       if (!force && sig === memSig) return;
       memSig = sig;
-      el.innerHTML = '<div class="row sb" style="margin-bottom:8px"><b>참여자 ' + list.length + ' / ' + r.max + '</b><span class="small muted">LG ' + R.teamCount(r, 'LG') + ' · 두산 ' + R.teamCount(r, '두산') + '</span></div><div class="list">' +
+      el.innerHTML = '<div class="row sb" style="margin-bottom:8px"><b>참여자 ' + list.length + ' / ' + r.max + '</b><span class="small muted">두산 ' + R.teamCount(r, '두산') + ' · 한화 ' + R.teamCount(r, '한화') + '</span></div><div class="list">' +
         list.map((m) => '<div class="item"><span class="grow">' + esc(m.name) + (m.id === u.id ? ' (나)' : '') + (m.role === 'host' ? ' <span class="badge red">방장</span>' : '') + (m.trialEndsPa != null ? ' <span class="badge">체험권</span>' : '') + '</span>' + teamBadge(m.team) +
           (isHost && m.id !== u.id ? '<button class="btn sm danger" data-act="kick" data-uid="' + m.id + '">내보내기</button>' : '') + '</div>').join('') + '</div>' +
         (isHost ? '' : '<button class="btn danger block" style="margin-top:12px" data-act="leave">방에서 나가기</button>');
@@ -524,12 +537,21 @@
       if (me.trialEndsPa != null && sim.curPa() >= me.trialEndsPa) { go('#/subscribe/' + id + '?reason=trial'); return false; }
       return true;
     }
+    let announced = -1;
+    function announceClutch() {
+      const cur = sim.curPa();
+      if (announced === cur) return;
+      if (!S.policy().predictDown && r.predictOn && sim.predictionOpen() && !((r.preds[cur] || {})[u.id])) {
+        announced = cur;
+        toast('승부처! ' + sim.clutchInfo(cur).label + ' — 예측 이벤트가 열렸어요');
+      }
+    }
     function tick() {
       if (!guard()) return;
       R.botTick(id);
       r = S.room(id);
-      drawVideo(); updateVideo(root); drawBanners();
-      $('[data-count]', root).textContent = '참여 ' + R.count(r) + ' / ' + r.max + ' · LG ' + R.teamCount(r, 'LG') + ' : 두산 ' + R.teamCount(r, '두산');
+      drawVideo(); updateVideo(root); drawBanners(); announceClutch();
+      $('[data-count]', root).textContent = '참여 ' + R.count(r) + ' / ' + r.max + ' · 두산 ' + R.teamCount(r, '두산') + ' : 한화 ' + R.teamCount(r, '한화');
       R.memberList(r).forEach((m) => {
         if (!knownMembers[m.id]) { knownMembers[m.id] = 1; if (m.id !== u.id) toast(m.name + '님 입장 · ' + R.count(r) + '/' + r.max); }
       });
@@ -541,6 +563,7 @@
       tv() { go('#/second/' + id); },
       tvoff() { const t = S.tv(id); if (t) S.setTv(id, Object.assign(t, { paired: false })); },
       tab(el) { tab = el.dataset.t; drawPanel(); },
+      gopred() { tab = 'predict'; drawPanel(); },
       hideopp(el) { const n = !S.prefs(u.id).hideOpp; S.setPrefs(u.id, { hideOpp: n }); el.classList.toggle('on', n); updateChat(true); },
       pick(el) { const cur = sim.curPa(); if (!sim.predictionOpen()) return toast('이번 타석은 마감됐어요'); R.predict(id, cur, el.dataset.c); toast('예측을 확정했어요: ' + el.dataset.c); updatePred(true); },
       kick(el) {

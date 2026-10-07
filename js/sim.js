@@ -8,7 +8,7 @@
   const SEED = 20261007;
   const CHOICES = ['안타', '볼넷', '삼진', '땅볼 아웃', '뜬공 아웃', '홈런'];
   const WEIGHTS = [0.27, 0.09, 0.2, 0.16, 0.24, 0.04];
-  const TEAMS = { home: 'LG', away: '두산' };
+  const TEAMS = { home: '두산', away: '한화' };
 
   function mulberry32(a) {
     return function () {
@@ -117,8 +117,24 @@
     };
   }
 
+  /** 승부처: 만루 / 득점권(2·3루 주자) / 8회 이후 2점 차 이내 접전에서 주자가 있는 상황 */
+  const CLUTCH_POINTS = 30;
+  function clutchInfo(i) {
+    const all = pas();
+    if (i < 0 || i >= all.length) return null;
+    const st = stateBefore(i);
+    const team = TEAMS[all[i].side];
+    const b = st.bases;
+    const diff = Math.abs(st.score.home - st.score.away);
+    if (b[0] && b[1] && b[2]) return { kind: '만루', label: '만루 승부처', team };
+    if (b[1] || b[2]) return { kind: '득점권', label: '득점권 찬스', team };
+    if (st.inning >= 8 && diff <= 2 && (b[0] || b[1] || b[2])) return { kind: '접전', label: '후반 접전 승부처', team };
+    return null;
+  }
+  function isClutch(i) { return !!clutchInfo(i); }
+
   function elapsedInPa() { return gameNow() % PA_MS; }
-  function predictionOpen() { return !isEnded() && elapsedInPa() < PA_MS * PRED_WINDOW; }
+  function predictionOpen() { return !isEnded() && isClutch(curPa()) && elapsedInPa() < PA_MS * PRED_WINDOW; }
   function predictionSecondsLeft() {
     const speed = readClock().speed || 1;
     return Math.max(0, Math.ceil((PA_MS * PRED_WINDOW - elapsedInPa()) / 1000 / speed));
@@ -161,6 +177,7 @@
   TT.sim = {
     PA_MS, CHOICES, TEAMS, pas, curPa, isEnded, stateBefore, gameNow, setSpeed, restart, elapsedInPa,
     predictionOpen, predictionSecondsLeft, flash, halfLabel, eventText, scoringEvents, paOfInning, botChoice,
+    clutchInfo, isClutch, CLUTCH_POINTS,
     speed: () => readClock().speed || 1,
   };
 })();

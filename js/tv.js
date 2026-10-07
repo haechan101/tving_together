@@ -19,7 +19,7 @@
     updateVideo(document);
     const r = S.room(id);
     $('#roomtitle').textContent = r ? r.hostName + '님의 함께보기 방' : '방을 찾을 수 없어요';
-    $('#roomsub').textContent = r ? '참여 ' + R.count(r) + ' / ' + r.max + '명 · LG ' + R.teamCount(r, 'LG') + ' : 두산 ' + R.teamCount(r, '두산') : '';
+    $('#roomsub').textContent = r ? '참여 ' + R.count(r) + ' / ' + r.max + '명 · 두산 ' + R.teamCount(r, '두산') + ' : 한화 ' + R.teamCount(r, '한화') : '';
     const t = S.tv(id);
     const paired = !!(t && t.paired);
     $('#codebox').innerHTML = paired

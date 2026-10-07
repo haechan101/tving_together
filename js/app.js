@@ -63,7 +63,8 @@
     '<li><b>TV</b> 버튼으로 세컨드 스크린 연결 (UC-04)</li>' +
     '<li><b>관리자 콘솔</b>에서 체험권 정책·신고·장애 대응 (UC-10~14)</li></ol>' +
     '<h4>Use Case 매핑</h4><p><span class="tag">UC-01</span>방 생성 <span class="tag">UC-02</span>링크 공유 <span class="tag">UC-03</span>방 관리 <span class="tag">UC-04</span>TV 연결 <span class="tag">UC-05</span>링크 입장 <span class="tag">UC-06</span>경기 요약 <span class="tag">UC-07</span>득점 장면 <span class="tag">UC-08</span>구독 <span class="tag">UC-09</span>채팅 <span class="tag">UC-10</span>예측 <span class="tag">UC-11</span>신고 <span class="tag">UC-12~14</span>관리자</p>' +
-    '<h4>참고</h4><p>경기·선수·득점은 모두 가상의 시뮬레이션이에요. 체험권 횟수·시간 등 수치는 설계 목표(가정)예요.</p>';
+    '<h4>참고</h4><p>경기(두산 vs 한화)·선수·득점은 모두 가상의 시뮬레이션이에요. 승부예측은 만루·득점권·후반 접전 같은 <b>승부처</b>에서만 이벤트로 열려요. 체험권 횟수·시간 등 수치는 설계 목표(가정)예요.</p>' +
+    '<p style="font-size:11px">경기 사진: <a href="https://commons.wikimedia.org/wiki/File:Jamsil_Baseball_Stadium.jpg" target="_blank" rel="noopener" style="color:inherit">Jamsil Baseball Stadium (두산 vs 한화)</a>, 주전자, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener" style="color:inherit">CC BY-SA 3.0</a>, Wikimedia Commons · 잘라서 사용</p>';
 
   function curRoomId() {
     const p = parse();

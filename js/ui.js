@@ -58,8 +58,8 @@
 
   function videoHtml(compact) {
     return '<div class="video' + (compact ? ' compact' : '') + '" data-video>' +
-      '<div class="v-top"><span class="live">LIVE</span><span>KBO 리그 · 잠실</span><span class="v-auto" data-auto hidden>자동 화질 조정 중</span></div>' +
-      '<div class="v-score"><span class="tn">LG</span><b data-home>0</b><span class="vs">:</span><b data-away>0</b><span class="tn">두산</span></div>' +
+      '<div class="v-top"><span class="live">LIVE</span><span>KBO 리그 · 잠실</span><span class="v-auto" data-auto hidden>자동 화질 조정 중</span><span class="clutch" data-clutch hidden>승부처</span></div>' +
+      '<div class="v-score"><span class="tn">두산</span><b data-home>0</b><span class="vs">:</span><b data-away>0</b><span class="tn">한화</span></div>' +
       '<div class="v-state"><span data-inning></span><span data-outs></span><span data-diamond></span></div>' +
       '<div class="v-flash" data-flash hidden></div></div>';
   }
@@ -80,6 +80,8 @@
       $('[data-outs]', v).innerHTML = outsHtml(st.outs);
       $('[data-diamond]', v).innerHTML = diamond(st.bases);
     }
+    const cl = $('[data-clutch]', v);
+    if (cl) { const ci = !st.ended ? sim.clutchInfo(cur) : null; cl.hidden = !ci; if (ci) cl.textContent = '승부처 · ' + ci.label; }
     const f = sim.flash();
     const fl = $('[data-flash]', v);
     if (f) {
@@ -102,7 +104,7 @@
     const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
     return h > 0 ? h + '시간 ' + m + '분 후 만료' : m + '분 ' + s + '초 후 만료';
   }
-  function teamBadge(team) { return '<span class="badge ' + (team === 'LG' ? 'home' : 'away') + '">' + esc(team) + '</span>'; }
+  function teamBadge(team) { return '<span class="badge ' + (team === '두산' ? 'home' : 'away') + '">' + esc(team) + '</span>'; }
 
   function profileModal(onDone) {
     const u = TT.store.user();
